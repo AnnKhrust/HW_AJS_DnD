@@ -174,6 +174,13 @@ export class Trello {
   onMouseMove(e) {
     if (!this.draggedItem) return;
 
+    if (!(e.target instanceof HTMLElement)) {
+      return;
+    }
+
+    this.draggedItem.style.left = e.pageX - this.shift.x + "px";
+    this.draggedItem.style.top = e.pageY - this.shift.y + "px";
+
     // Перемещаем draggedItem в document.body
     document.body.appendChild(this.draggedItem);
     this.draggedItem.style.pointerEvents = "none";
