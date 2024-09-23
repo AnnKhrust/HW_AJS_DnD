@@ -151,8 +151,24 @@ export class Trello {
       this.originalParent = item.parentElement;
       this.nextSibling = item.nextSibling;
       this.offsetX = e.clientX - item.getBoundingClientRect().left;
-      this.offsetY = e.clientY - item.getBoundingClientRect().top;
+      this.offsetY = e.clientY - item.getBoundingClientRect().top + this.padding;
     }, 200);
+
+    // Устанавливаем стили для draggedItem
+    this.draggedItem.classList.add("dragged");
+    this.draggedItem.style.cursor = "grabbing";
+    this.draggedItem.style.left = e.pageX - this.offsetX + "px";
+    this.draggedItem.style.top = e.pageY - this.offsetY + "px";
+
+    
+    // пустая карточка, создаем её
+    if (!this.emptyEl) {
+      const emptyEl = document.createElement("div");
+      emptyEl.style.height = this.draggedItem.offsetHeight + "px";
+      emptyEl.style.width = "100%";
+      emptyEl.classList.add("empty");
+      this.draggedItem.before(this.emptyEl);
+    }
   }
 
   onMouseMove(e) {
@@ -161,11 +177,7 @@ export class Trello {
     // Перемещаем draggedItem в document.body
     document.body.appendChild(this.draggedItem);
     this.draggedItem.style.pointerEvents = "none";
-    // Устанавливаем стили для draggedItem
-    this.draggedItem.classList.add("dragged");
-    this.draggedItem.style.cursor = "grabbing";
-    this.draggedItem.style.left = e.pageX - this.offsetX + "px";
-    this.draggedItem.style.top = e.pageY - this.offsetY + "px";
+    
 
     // Находим элементы под курсором
     const elementsUnderCursor = document.elementsFromPoint(
@@ -189,15 +201,6 @@ export class Trello {
       oldEmpty.remove();
     }
 
-    // Если есть nextEl и пустая карточка не существует, создаем её
-    if (nextEl && !oldEmpty) {
-      const emptyEl = document.createElement("div");
-      emptyEl.style.height = this.draggedItem.offsetHeight + "px";
-      emptyEl.style.width = "100%";
-      emptyEl.classList.add("empty");
-
-      nextEl.parentNode.insertBefore(emptyEl, nextEl);
-    }
 
     // Если есть nextEl и пустая карточка уже существует, перемещаем её
     if (nextEl && oldEmpty) {
