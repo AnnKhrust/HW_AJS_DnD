@@ -1,4 +1,4 @@
 
-[![Build status](https://ci.appveyor.com/api/projects/status/bbsvh1h08qn5qg19?svg=true)](https://ci.appveyor.com/project/lunalexandra/ht-dnd)
+![CI](https://github.com/AnnKhrust/HW_AJS_DnD/actions/workflows/web.yml/badge.svg)
 
 
